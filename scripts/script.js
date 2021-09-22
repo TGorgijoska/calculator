@@ -5,13 +5,18 @@
 
  let firstNum = "", 
     secondNum = "",
-    operator,
+    operator = "",
     result = "",
     isEqual = false;
 let clearDisplayBool = false;
 
 digits.forEach(digit => 
     digit.addEventListener('click', () => {
+        if(isEqual){
+            firstNum = "";
+            result = "";
+            isEqual = false;
+        }
         let digitValue = getDigit(digit);
 
         if(clearDisplayBool) {
@@ -22,17 +27,26 @@ digits.forEach(digit =>
         clearDisplayBool = false;
         })
 );
-operators.forEach(op => op.addEventListener('click', () => {    
+operators.forEach(op => op.addEventListener('click', () => { 
+    operatorSelected(op);
+    if(isEqual){
+        setOperator(op);
+        isEqual = false;
+    }   
     if(secondNum != ""){
         operate(operator, Number(firstNum), Number(secondNum));
         firstNum = result;
         secondNum = "";
+        operator = "";
     }
     if(result != ""){
         clearDisplay();
         display(result);
     }
     setOperator(op);
+    if(operator == "="){
+        isEqual == true;   
+    }
     clearDisplayBool = true;   
 }));
 
@@ -43,7 +57,7 @@ function setOperator(symbol) {
     }
 }
 function storeNumber(value) {
-    if(operator == null){
+    if(operator == "" || firstNum == ""){
         firstNum += value;
     } else {
         secondNum += value;
@@ -57,10 +71,6 @@ function clearDisplay() {
 }
 function display(value) {
     displayBox.textContent += value;
-}
-
-function equal(){
-    
 }
 
 // operate
@@ -93,4 +103,13 @@ function multiply(x,y) {
 }
 function divide(x, y) {
     result = x/y;
+}
+
+// DISPLAY CHANGING FUNCTIONS
+function operatorSelected(op) {
+    if(operator != ""){
+        let remove = document.querySelector(`[data-operator="${operator}"]`);
+        remove.classList.remove('selected');
+    }
+    op.classList.add('selected');
 }

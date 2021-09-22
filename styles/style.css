@@ -48,6 +48,11 @@
     cursor: pointer;
     font-size: 20px;
     padding: 15px 10px ;
+    transition: 1s ease;
+}
+
+.selected {
+    background-color: bisque;
 }
 #plus{
     grid-area: aArea;
