@@ -6,23 +6,24 @@
  let firstNum = "", 
     secondNum = "",
     operator = "",
-    result = "",
+    result = 0,
     isEqual = false;
+let clearDisplayBool = false;
 
 digits.forEach(digit => digit.addEventListener('click', () => {
         // if the last choice was "=", clear everything
         if(isEqual){
-            firstNum = "";
-            result = "";
-            isEqual = false;
+            clearAll();
         }
         // new value
         let digitValue = getDigit(digit);
         storeNumber(digitValue);
-
-        clearDisplay();
-        display(digitValue);
-        
+        // if we are entering second number => clear 
+        if(clearDisplayBool){
+            clearDisplay();
+        }
+        updateDisplay(digitValue);
+        clearDisplayBool = false;
         })
 );
 operators.forEach(op => op.addEventListener('click', () => { 
@@ -32,20 +33,32 @@ operators.forEach(op => op.addEventListener('click', () => {
         setOperator(op);
         isEqual = false;
     }   
-    // if we got both naumbers, do the math and display result
+    // if we got both naumbers, do the math and updateDisplay result
     if(secondNum != ""){
         operate(operator, Number(firstNum), Number(secondNum));
+        if(result.toString().length > 10){
+            result = Number.parseFloat(result).toFixed(5);
+        }
         firstNum = result;
         secondNum = "";
         operator = "";
 
         clearDisplay();
-        display(result);
+        updateDisplay(result);
     }
     setOperator(op);
+    clearDisplayBool = true;
 
 }));
+clearBtn.addEventListener('click', clearAll);
 
+function clearAll(){
+    firstNum = "";
+    secondNum = "";
+    result = "";
+    isEqual = false;
+    clearDisplay();
+}
 function setOperator(symbol) {
     operator = symbol.dataset.operator;
     if (operator == "="){
@@ -65,7 +78,7 @@ function getDigit(digit){
 function clearDisplay() {
     displayBox.textContent = "";
 }
-function display(value) {
+function updateDisplay(value) {
     displayBox.textContent += value;
 }
 
@@ -96,7 +109,11 @@ function multiply(x,y) {
     result = x*y;
 }
 function divide(x, y) {
+    if(y == 0){
+        displayBox.textContent = "can't do that man";
+    } else {
     result = x/y;
+    }
 }
 
 // DISPLAY CHANGING FUNCTIONS
