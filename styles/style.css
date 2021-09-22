@@ -1,0 +1,73 @@
+
+*,*::before, *::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.calculator{
+    border: 1px solid black;  
+    margin: 100px auto;
+    width: 250px;
+    
+}
+.keys{
+    display: flex;
+}
+.display{
+    width: 100%;
+    height: 70px;
+    text-align: end;
+}
+.digits{
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(4, 50px);
+    text-align: center;
+    
+}
+.number{
+    cursor: pointer;
+    padding: 15px 10px;
+    border: 1px solid black;
+}
+.operators{
+    display: grid;
+    grid-template-columns: repeat(2, 50px);
+    grid-template-rows: repeat(4, 50px);
+    grid-template-areas: 
+        "cArea dArea"
+        "aArea mArea"
+        "aArea sArea"
+        "aArea eArea"
+    ;
+    text-align: center;
+    
+}
+.operator{
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 15px 10px ;
+}
+#plus{
+    grid-area: aArea;
+    padding: 50px 10px;
+}
+#minus{
+    grid-area: sArea;
+}
+#mult{
+    grid-area: mArea;
+}
+#division{
+    grid-area: dArea;
+}
+#equal{
+    grid-area: eArea;
+}
+.btn{
+    grid-area: cArea;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid black;
+}
