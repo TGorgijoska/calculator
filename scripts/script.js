@@ -8,46 +8,42 @@
     operator = "",
     result = "",
     isEqual = false;
-let clearDisplayBool = false;
 
-digits.forEach(digit => 
-    digit.addEventListener('click', () => {
+digits.forEach(digit => digit.addEventListener('click', () => {
+        // if the last choice was "=", clear everything
         if(isEqual){
             firstNum = "";
             result = "";
             isEqual = false;
         }
+        // new value
         let digitValue = getDigit(digit);
-
-        if(clearDisplayBool) {
-            clearDisplay()
-        };
-        display(digitValue);
         storeNumber(digitValue);
-        clearDisplayBool = false;
+
+        clearDisplay();
+        display(digitValue);
+        
         })
 );
 operators.forEach(op => op.addEventListener('click', () => { 
-    operatorSelected(op);
+    operatorSelectedDisplay(op);
+    // change choice from = to some other operator
     if(isEqual){
         setOperator(op);
         isEqual = false;
     }   
+    // if we got both naumbers, do the math and display result
     if(secondNum != ""){
         operate(operator, Number(firstNum), Number(secondNum));
         firstNum = result;
         secondNum = "";
         operator = "";
-    }
-    if(result != ""){
+
         clearDisplay();
         display(result);
     }
     setOperator(op);
-    if(operator == "="){
-        isEqual == true;   
-    }
-    clearDisplayBool = true;   
+
 }));
 
 function setOperator(symbol) {
@@ -88,10 +84,8 @@ function operate(operator, x, y) {
         case "/":
             divide(x, y);
             break;
-    }  
-    
+    }     
 }
-
 function add(x, y){
     result = x+y;
 }
@@ -106,7 +100,7 @@ function divide(x, y) {
 }
 
 // DISPLAY CHANGING FUNCTIONS
-function operatorSelected(op) {
+function operatorSelectedDisplay(op) {
     if(operator != ""){
         let remove = document.querySelector(`[data-operator="${operator}"]`);
         remove.classList.remove('selected');
