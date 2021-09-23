@@ -17,6 +17,7 @@ let clearDisplayBool = false;
 let key;
 
 /* --- EVENT LISTENERS --- */
+    //  keyboard support
 document.addEventListener('keyup', function(e){
     switch (e.key){
         case '1':
@@ -119,6 +120,9 @@ function fixLenght() {
 
 }
 function deleteNum() {
+    if(displayBox.textContent.length == 1 && displayBox.textContent == '-'){
+        return;
+    }
     if(displayBox.textContent.length > 0){
         displayBox.textContent = displayBox.textContent.slice(0,-1);
         let value = displayBox.textContent;
@@ -178,6 +182,7 @@ function clearAll(){
     result = "";
     operator = "";
     isEqual = false;
+    numLength = 0;
     dot.classList.remove('disable');
     clearDisplay();
 }
