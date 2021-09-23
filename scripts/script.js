@@ -8,7 +8,8 @@
     secondNum = "",
     operator = "",
     result = 0,
-    isEqual = false;
+    isEqual = false,
+    numLength = 0;
 let clearDisplayBool = false;
 let key;
 
@@ -44,14 +45,19 @@ document.addEventListener('keyup', function(e){
             clearAll();
             break;
     }
-}) 
-digits.forEach(digit => digit.addEventListener('click',() => {digitPressed(digit)} ));
+}); 
+
+digits.forEach(digit => digit.addEventListener('click',() => {digitPressed(digit) }));
 operators.forEach(op => op.addEventListener('click', () => {operatorPressed(op) }));
 clearBtn.addEventListener('click', clearAll);
 dot.addEventListener('click', dotToggle);
 
 /* --- FUCTIONS --- */
 function digitPressed(digit){
+    numLength++;
+    if(numLength >= 12){
+        return;
+    }
     // if the last choice was "=", clear everything
     if(isEqual){
         clearAll();
@@ -67,6 +73,7 @@ function digitPressed(digit){
     clearDisplayBool = false;
 }
 function operatorPressed(op){
+    numLength = 0;
     // operatorSelectedDisplay(op);
     // change choice from = to some other operator
     if(isEqual){
@@ -76,9 +83,9 @@ function operatorPressed(op){
     // if we got both naumbers, do the math and updateDisplay result
     if(secondNum != ""){
         operate(operator, Number(firstNum), Number(secondNum));
-        if(result.toString().length > 10){
-            result = Number(result.toFixed(5));
-        }
+
+        fixLenght();
+        
         firstNum = result;
         secondNum = "";
         operator = "";
@@ -91,6 +98,17 @@ function operatorPressed(op){
     dot.classList.remove('disable');
 }
 
+function fixLenght() {
+    let numArr = result.toString().split('.');
+    if(numArr.length == 2){
+        if(result.toString().length > 12){
+            let excess = result.toString().length - 12; 
+            let clip = numArr[1].length - excess;
+            result = Number(result.toFixed(clip));
+        }
+    }
+
+}
 function dotToggle(){
     if(displayBox.textContent == "."){
         displayBox.textContent = '0.';
@@ -102,6 +120,7 @@ function clearAll(){
     firstNum = "";
     secondNum = "";
     result = "";
+    operator = "";
     isEqual = false;
     dot.classList.remove('disable');
     clearDisplay();
