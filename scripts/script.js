@@ -2,7 +2,9 @@
  const operators = document.querySelectorAll('.operator');
  const dot = document.querySelector('.dot');
  const clearBtn = document.querySelector('.btn');
- const displayBox = document.querySelector('#display-value');
+ const backspace = document.getElementById('backspace');
+ const displayBox = document.getElementById('display-value');
+
 
  let firstNum = "", 
     secondNum = "",
@@ -50,10 +52,12 @@ document.addEventListener('keyup', function(e){
 digits.forEach(digit => digit.addEventListener('click',() => {digitPressed(digit) }));
 operators.forEach(op => op.addEventListener('click', () => {operatorPressed(op) }));
 clearBtn.addEventListener('click', clearAll);
+backspace.addEventListener('click', deleteNum);
 dot.addEventListener('click', dotToggle);
 
 /* --- FUCTIONS --- */
 function digitPressed(digit){
+    // prevent from entering too long number
     numLength++;
     if(numLength >= 12){
         return;
@@ -108,6 +112,22 @@ function fixLenght() {
         }
     }
 
+}
+function deleteNum() {
+    displayBox.textContent = displayBox.textContent.slice(0,-1);
+    let value = displayBox.textContent;
+    if(result != ""){
+        result = value;
+        firstNum = value;
+    }
+    else if(operator == "" || firstNum == ""){
+        firstNum = value;
+        numLength--;
+    } else {
+        secondNum = value;
+        numLength--;
+    }
+    
 }
 function dotToggle(){
     if(displayBox.textContent == "."){
