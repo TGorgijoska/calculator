@@ -4,9 +4,13 @@
 		<div xmlns="http://www.w3.org/1999/xhtml">
 			<style>
 				button{
-                    background-color:pink; 
+                    background-color:hsl(7,95%, 95%); 
                     color:hsl(7, 95%, 50%);
-                    
+                    border: 1px solid hsl(7, 95%, 50%);
+                    padding:10px;
+                    border-radius:10px;
+                    font-size:20px;
+
                 }
 			</style>		
 			<button><a href="https://tgorgijoska.github.io/calculator/">Live Preview</a></button>			
