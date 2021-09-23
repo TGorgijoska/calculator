@@ -1,5 +1,6 @@
  const digits = document.querySelectorAll('.number');
  const operators = document.querySelectorAll('.operator');
+ const dot = document.querySelector('.dot');
  const clearBtn = document.querySelector('.btn');
  const displayBox = document.querySelector('#display-value');
 
@@ -9,25 +10,64 @@
     result = 0,
     isEqual = false;
 let clearDisplayBool = false;
+let key;
 
-digits.forEach(digit => digit.addEventListener('click', () => {
-        // if the last choice was "=", clear everything
-        if(isEqual){
+/* --- EVENT LISTENERS --- */
+document.addEventListener('keyup', function(e){
+    switch (e.key){
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+        case '.':
+            key = document.querySelector(`[data-numbervalue="${e.key}"]`);
+            digitPressed(key);
+            break;
+        case '/':
+        case '*':  
+        case '+':
+        case '-':
+            key = document.querySelector(`[data-operator="${e.key}"]`);
+            operatorPressed(key);
+            break;
+        case 'Enter':
+            key = document.querySelector('[data-operator="="]');
+            operatorPressed(key);
+            break;
+        case 'c':
             clearAll();
-        }
-        // new value
-        let digitValue = getDigit(digit);
-        storeNumber(digitValue);
-        // if we are entering second number => clear 
-        if(clearDisplayBool){
-            clearDisplay();
-        }
-        updateDisplay(digitValue);
-        clearDisplayBool = false;
-        })
-);
-operators.forEach(op => op.addEventListener('click', () => { 
-    operatorSelectedDisplay(op);
+            break;
+    }
+}) 
+digits.forEach(digit => digit.addEventListener('click',() => {digitPressed(digit)} ));
+operators.forEach(op => op.addEventListener('click', () => {operatorPressed(op) }));
+clearBtn.addEventListener('click', clearAll);
+dot.addEventListener('click', dotToggle);
+
+/* --- FUCTIONS --- */
+function digitPressed(digit){
+    // if the last choice was "=", clear everything
+    if(isEqual){
+        clearAll();
+    }
+    // new value
+    let digitValue = getDigit(digit);
+    storeNumber(digitValue);
+    // if we are entering second number => clear 
+    if(clearDisplayBool){
+        clearDisplay();
+    }
+    updateDisplay(digitValue);
+    clearDisplayBool = false;
+}
+function operatorPressed(op){
+    // operatorSelectedDisplay(op);
     // change choice from = to some other operator
     if(isEqual){
         setOperator(op);
@@ -37,7 +77,7 @@ operators.forEach(op => op.addEventListener('click', () => {
     if(secondNum != ""){
         operate(operator, Number(firstNum), Number(secondNum));
         if(result.toString().length > 10){
-            result = Number.parseFloat(result).toFixed(5);
+            result = Number(result.toFixed(5));
         }
         firstNum = result;
         secondNum = "";
@@ -48,15 +88,22 @@ operators.forEach(op => op.addEventListener('click', () => {
     }
     setOperator(op);
     clearDisplayBool = true;
+    dot.classList.remove('disable');
+}
 
-}));
-clearBtn.addEventListener('click', clearAll);
+function dotToggle(){
+    if(displayBox.textContent == "."){
+        displayBox.textContent = '0.';
+    }
+    dot.classList.add('disable');
+}
 
 function clearAll(){
     firstNum = "";
     secondNum = "";
     result = "";
     isEqual = false;
+    dot.classList.remove('disable');
     clearDisplay();
 }
 function setOperator(symbol) {
@@ -110,17 +157,8 @@ function multiply(x,y) {
 }
 function divide(x, y) {
     if(y == 0){
-        displayBox.textContent = "can't do that man";
+        result = 0;
     } else {
     result = x/y;
     }
-}
-
-// DISPLAY CHANGING FUNCTIONS
-function operatorSelectedDisplay(op) {
-    if(operator != ""){
-        let remove = document.querySelector(`[data-operator="${operator}"]`);
-        remove.classList.remove('selected');
-    }
-    op.classList.add('selected');
 }
