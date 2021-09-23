@@ -3,6 +3,7 @@
  const dot = document.querySelector('.dot');
  const clearBtn = document.querySelector('.btn');
  const backspace = document.getElementById('backspace');
+ const sign = document.getElementById('changeSign');
  const displayBox = document.getElementById('display-value');
 
 
@@ -46,6 +47,9 @@ document.addEventListener('keyup', function(e){
         case 'c':
             clearAll();
             break;
+        case 'Backspace':
+            deleteNum();
+            break;
     }
 }); 
 
@@ -53,6 +57,7 @@ digits.forEach(digit => digit.addEventListener('click',() => {digitPressed(digit
 operators.forEach(op => op.addEventListener('click', () => {operatorPressed(op) }));
 clearBtn.addEventListener('click', clearAll);
 backspace.addEventListener('click', deleteNum);
+sign.addEventListener('click', changeSign);
 dot.addEventListener('click', dotToggle);
 
 /* --- FUCTIONS --- */
@@ -114,20 +119,51 @@ function fixLenght() {
 
 }
 function deleteNum() {
-    displayBox.textContent = displayBox.textContent.slice(0,-1);
-    let value = displayBox.textContent;
-    if(result != ""){
-        result = value;
-        firstNum = value;
+    if(displayBox.textContent.length > 0){
+        displayBox.textContent = displayBox.textContent.slice(0,-1);
+        let value = displayBox.textContent;
+        if(result != ""){
+            result = value;
+            firstNum = value;
+        }
+        else if(operator == "" || firstNum == ""){
+            firstNum = value;
+            numLength--;
+        } else {
+            secondNum = value;
+            numLength--;
+        }  
     }
-    else if(operator == "" || firstNum == ""){
-        firstNum = value;
-        numLength--;
-    } else {
-        secondNum = value;
-        numLength--;
+}
+function changeSign(){
+    let value;
+    if(displayBox.textContent.includes('-')){
+        displayBox.textContent = displayBox.textContent.substr(1);
+        value = displayBox.textContent;
+        if(result != ""){
+            result = value;
+            firstNum = value;
+        }
+        else if(operator == "" || firstNum == ""){
+            firstNum = value;
+        } else {
+            secondNum = value;
+        }  
     }
-    
+    else {
+        displayBox.textContent = '-' + displayBox.textContent;
+        value = displayBox.textContent;
+        if(result != ""){
+            result = value;
+            firstNum = value;
+        }
+        else if(operator == "" || firstNum == ""){
+            firstNum = value;
+        } else {
+            secondNum = value;
+        }  
+    }
+
 }
 function dotToggle(){
     if(displayBox.textContent == "."){
@@ -156,6 +192,7 @@ function storeNumber(value) {
         firstNum += value;
     } else {
         secondNum += value;
+        result = 0;
     }
 }
 function getDigit(digit){
